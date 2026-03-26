@@ -9,7 +9,14 @@ const gastoListado = document.querySelector('#gasto ul');
 
 eventListeners();
 function eventListeners() {
-    document.addEventListener('DOMContentLoaded', preguntarPresupuesto)
+    document.addEventListener('DOMContentLoaded', preguntarPresupuesto);
+
+    formulario.addEventListener('submit', agregarGasto);
+
+
+
+
+
 }
 
 
@@ -34,6 +41,38 @@ class UI {
         document.querySelector('#total').textContent = presupuesto;
         document.querySelector('#restante').textContent = restante;
 
+    }
+
+    imprimirAlerta(mensaje, tipo) {
+
+        // crear el div 
+        const divMensaje = document.createElement('div');
+        divMensaje.classList.add('text-center', 'alert');
+
+        if (tipo === 'error') {
+            divMensaje.classList.add('alert-danger'); // clases de bootrap
+            } 
+
+        else {
+            divMensaje.classList.add('alert-succes')
+        };
+
+        //  Mensaje de error
+        divMensaje.textContent = mensaje;
+
+        // Insertar en el HTML 
+
+        document.querySelector('.primario').insertBefore(divMensaje, formulario);
+
+        // Quitar el mensaje de alerta 'Ambos campos son olbigatorios'
+
+        setTimeout(()=> {
+            divMensaje.remove();
+
+        }, 3000)
+
+
+        
     }
 
 }
@@ -69,3 +108,31 @@ function preguntarPresupuesto() {
 
 
 }
+
+// Añade gastos
+
+function agregarGasto(e) {
+    e.preventDefault();
+
+    // Leer datos del formulario 
+
+    const nombre = document.querySelector('#gasto').value;
+    const cantidad = document.querySelector('#cantidad').value;
+
+
+
+    // Validar formulario
+
+    if (nombre === '' || cantidad === '' ) {
+        ui.imprimirAlerta('Ambos campos son olbigatorios', 'error');
+        return; 
+    
+    
+    } else if (cantidad <= 0 || isNaN (cantidad) ) {
+            ui.imprimirAlerta('Cantidad no válida', 'error');
+            return;
+        }      
+
+        console.log('Agregando Gasto...');
+
+    }
