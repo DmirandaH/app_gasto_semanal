@@ -1,6 +1,6 @@
 // Variables y Selectores
 const formulario =  document.querySelector('#agregar-gasto');
-const gastoListado = document.querySelector('#gasto ul'); 
+const gastoListado = document.querySelector('#gastos ul'); 
 
 
 
@@ -13,10 +13,6 @@ function eventListeners() {
 
     formulario.addEventListener('submit', agregarGasto);
 
-
-
-
-
 }
 
 
@@ -28,6 +24,11 @@ class Presupuesto {
         this.restante = Number(presupuesto);
         this.gasto = [];
 
+    }
+
+    nuevoGasto(gasto) {
+        this.gasto = [...this.gasto, gasto]
+        console.log(this.gasto);
     }
 
 }
@@ -51,10 +52,8 @@ class UI {
 
         if (tipo === 'error') {
             divMensaje.classList.add('alert-danger'); // clases de bootrap
-            } 
-
-        else {
-            divMensaje.classList.add('alert-succes')
+        }  else {
+            divMensaje.classList.add('alert-success')
         };
 
         //  Mensaje de error
@@ -75,12 +74,16 @@ class UI {
         
     }
 
+    
+
 }
 
 // Instanciar la clase UI
 const ui = new UI();
 
 let presupuesto;
+
+
 
 
 
@@ -117,7 +120,7 @@ function agregarGasto(e) {
     // Leer datos del formulario 
 
     const nombre = document.querySelector('#gasto').value;
-    const cantidad = document.querySelector('#cantidad').value;
+    const cantidad = Number(document.querySelector('#cantidad').value);
 
 
 
@@ -133,6 +136,19 @@ function agregarGasto(e) {
             return;
         }      
 
-        console.log('Agregando Gasto...');
+    // Generar un objeto con el gasto
 
-    }
+    const gasto = {nombre, cantidad, id: Date.now()}
+
+
+    // añade un nuevo gasto
+    presupuesto.nuevoGasto(gasto);
+
+
+    // Mensaje de creado con exito el gasto ingresado
+    ui.imprimirAlerta('Gasto agregado Correctamente');
+
+    // Reinicia el formulario
+    formulario.reset();
+
+}
